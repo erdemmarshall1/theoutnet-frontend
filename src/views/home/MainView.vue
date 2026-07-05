@@ -1,8 +1,8 @@
 ﻿<template>
   <div class="ton-home">
     <div class="ton-promo-bar">
-      <span>FREE SHIPPING on orders over $500 · Use code: WHOLESALE</span>
-      <a class="ton-promo-link" href="/main">Exclusions apply – see T&amp;Cs</a>
+      <span>15% off your first clothing order with code: WHOLESALE15</span>
+      <a class="ton-promo-link" href="/main">T&amp;Cs apply</a>
     </div>
 
     <section class="ton-hero">
@@ -11,7 +11,9 @@
           <div class="ton-hero-slide" v-for="(banner, idx) in banners.length ? banners : fallbackBanners" :key="idx">
             <a :href="banner.link || '#'" class="ton-hero-link">
               <div class="ton-hero-img-wrap">
-                <div class="ton-hero-fallback" v-if="!banner.image" :style="{ background: heroColors[idx % heroColors.length] }">
+                <img v-if="banner.image" :src="$imgUrl(banner.image)" :alt="banner.title" @error="$imgFallback" />
+                <img v-else-if="banner.localImage" :src="banner.localImage" :alt="banner.title" />
+                <div v-else class="ton-hero-fallback" :style="{ background: heroColors[idx % heroColors.length] }">
                   <div class="ton-hero-content">
                     <span class="ton-hero-tag">{{ banner.tag || 'NEW SEASON' }}</span>
                     <h2 class="ton-hero-title">{{ banner.title || heroTitles[idx] }}</h2>
@@ -19,7 +21,6 @@
                     <span class="ton-hero-cta">SHOP NOW</span>
                   </div>
                 </div>
-                <img v-else :src="$imgUrl(banner.image)" :alt="banner.title" @error="$imgFallback" />
               </div>
             </a>
           </div>
@@ -84,7 +85,8 @@
       <div class="ton-promo-grid">
         <div class="ton-promo-card" v-for="(promo, idx) in promoBlocks" :key="idx" @click="$router.push(promo.link)">
           <div class="ton-promo-img">
-            <div class="ton-promo-fallback" :style="{ background: promo.color }">
+            <img v-if="promo.image" :src="promo.image" :alt="promo.title" loading="lazy" />
+            <div v-else class="ton-promo-fallback" :style="{ background: promo.color }">
               <div class="ton-promo-text">
                 <h3>{{ promo.title }}</h3>
                 <p>{{ promo.subtitle }}</p>
@@ -162,6 +164,16 @@ import { useRouter } from 'vue-router'
 import { useAppStore } from '@/stores/app'
 import { get, qe } from '@/api/request'
 import QuickViewDialog from '@/components/QuickViewDialog.vue'
+import heroCampaign from '@/assets/images/banners/hero-campaign-desktop.jpg'
+import heroCampaignMobile from '@/assets/images/banners/hero-campaign-mobile.jpg'
+import saleBanner from '@/assets/images/banners/sale-banner-desktop.jpg'
+import saleBannerMobile from '@/assets/images/banners/sale-banner-mobile.jpg'
+import promoBritish from '@/assets/images/banners/promo-british-icons.jpg'
+import promoWedding from '@/assets/images/banners/promo-destination-wedding.jpg'
+import promoSkirts from '@/assets/images/banners/promo-statement-skirts.jpg'
+import promoTops from '@/assets/images/banners/promo-stay-on-top.jpg'
+import promoTrending from '@/assets/images/banners/promo-trending.jpg'
+import promoSandals from '@/assets/images/banners/promo-sandals.jpg'
 
 const router = useRouter()
 const store = useAppStore()
@@ -183,19 +195,21 @@ const openQuickView = (id) => { quickViewProductId.value = id; quickViewVisible.
 let heroTimer = null
 
 const heroColors = ['#f4f2ee', '#e8e6e2', '#faf8f4', '#f0ece4']
-const heroTitles = ['Premium Collection', 'Bulk Pricing', 'Distributor Deals', 'New Season']
-const heroSubtitles = ['Discover luxury fashion at wholesale prices', 'Volume discounts up to 40% off retail', 'Exclusive pricing for registered wholesalers', 'Fresh inventory']
+const heroTitles = ['PRESS PLAY', 'SUMMER WITH CHESSY', 'NEW SEASON', 'BULK PRICING']
+const heroSubtitles = ['Summer essentials are here', 'Play, pause, and unwind in style', 'The latest drops at wholesale prices', 'Volume discounts up to 40% off retail']
 
 const fallbackBanners = [
-  { tag: 'WHOLESALE', title: 'Premium Collection', subtitle: 'Discover luxury fashion at wholesale prices', link: '/searchgoods' },
-  { tag: 'BULK', title: 'Bulk Pricing', subtitle: 'Volume discounts up to 40% off retail', link: '/searchgoods' },
+  { tag: 'NEW SEASON', title: 'PRESS PLAY', subtitle: 'Summer essentials are here', link: '/searchgoods', localImage: heroCampaign },
+  { tag: 'CAMPAIGN', title: 'SUMMER WITH CHESSY', subtitle: 'Play, pause, and unwind in style', link: '/searchgoods', localImage: saleBanner },
 ]
 
 const promoBlocks = [
-  { title: 'Summer Edit', subtitle: "Shop the season's essentials", link: '/searchgoods', color: '#f4f2ee' },
-  { title: 'Accessories', subtitle: 'Complete the look', link: '/searchgoods', color: '#e8e6e2' },
-  { title: 'Luxury Bags', subtitle: 'Designer styles reduced', link: '/searchgoods', color: '#ddd' },
-  { title: 'Shoes', subtitle: 'Step up your style', link: '/searchgoods', color: '#f4f2ee' },
+  { title: 'BRITISH ICONS', subtitle: 'Shop up to 80% off', link: '/searchgoods', image: promoBritish },
+  { title: 'DESTINATION WEDDING', subtitle: 'Shop up to 65% off', link: '/searchgoods', image: promoWedding },
+  { title: 'STATEMENT SKIRTS', subtitle: 'Shop up to 60% off', link: '/searchgoods', image: promoSkirts },
+  { title: 'STAY ON TOP', subtitle: 'Shop up to 75% off', link: '/searchgoods', image: promoTops },
+  { title: "WHAT'S TRENDING?", subtitle: 'Shop up to 60% off', link: '/searchgoods', image: promoTrending },
+  { title: 'CITY-TO-BEACH SANDALS', subtitle: 'Shop now', link: '/searchgoods', image: promoSandals },
 ]
 
 const catEmojis = {
@@ -256,7 +270,7 @@ onBeforeUnmount(function () {
 .ton-hero-slide { min-width: 100%; height: 100%; }
 .ton-hero-link { display: block; width: 100%; height: 100%; }
 .ton-hero-img-wrap { width: 100%; height: 100%; }
-.ton-hero-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+.ton-hero-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .ton-hero-fallback { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
 .ton-hero-content { text-align: center; color: #000; max-width: 600px; padding: 0 20px; }
 .ton-hero-tag { display: inline-block; font-size: 11px; font-weight: 400; letter-spacing: 3px; margin-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.15); padding-bottom: 8px; }
@@ -315,9 +329,11 @@ onBeforeUnmount(function () {
 .ton-badge--discount { background: #000; color: #fff; }
 .ton-badge--new { background: #b8922a; color: #fff; }
 
-.ton-promo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-.ton-promo-card { cursor: pointer; }
+.ton-promo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.ton-promo-card { cursor: pointer; position: relative; overflow: hidden; }
 .ton-promo-img { aspect-ratio: 1; overflow: hidden; }
+.ton-promo-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+.ton-promo-card:hover .ton-promo-img img { transform: scale(1.03); }
 .ton-promo-fallback { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
 .ton-promo-text { text-align: center; padding: 20px; }
 .ton-promo-text h3 { font-size: 18px; font-weight: 300; margin-bottom: 6px; }
