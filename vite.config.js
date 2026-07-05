@@ -59,11 +59,11 @@ export default defineConfig({
     host: '127.0.0.1',
     port: 5174,
     proxy: {
-      '/main': { target: 'http://localhost:3000', changeOrigin: true },
-      '/home': { target: 'http://localhost:3000', changeOrigin: true },
-      '/api': { target: 'http://localhost:3000', changeOrigin: true },
-      '/uploads': { target: 'http://localhost:3000', changeOrigin: true },
-      '/socket.io': { target: 'http://localhost:3000', ws: true },
+      '/main': { target: 'https://supportive-delight-production-b90c.up.railway.app', changeOrigin: true },
+      '/home': { target: 'https://supportive-delight-production-b90c.up.railway.app', changeOrigin: true },
+      '/api': { target: 'https://supportive-delight-production-b90c.up.railway.app', changeOrigin: true },
+      '/uploads': { target: 'https://supportive-delight-production-b90c.up.railway.app', changeOrigin: true },
+      '/socket.io': { target: 'https://supportive-delight-production-b90c.up.railway.app', ws: true },
     },
   },
 })

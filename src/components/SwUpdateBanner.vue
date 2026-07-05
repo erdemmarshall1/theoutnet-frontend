@@ -29,11 +29,11 @@ onMounted(() => {
   left: 50%;
   transform: translateX(-50%);
   z-index: 9999;
-  background: #1a1a2e;
-  border: 1px solid #333;
+  background: #ffffff;
+  border: 1px solid #e8e6e2;
   border-radius: 12px;
   padding: 12px 20px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
 }
 .sw-update-content {
   display: flex;
@@ -42,15 +42,15 @@ onMounted(() => {
   white-space: nowrap;
 }
 .sw-update-icon {
-  color: #409eff;
+  color: #000;
   font-size: 18px;
 }
 .sw-update-text {
-  color: #e0e0e0;
+  color: #000;
   font-size: 14px;
 }
 .sw-update-btn {
-  background: #409eff;
+  background: #000;
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -60,7 +60,7 @@ onMounted(() => {
   transition: background 0.2s;
 }
 .sw-update-btn:hover {
-  background: #66b1ff;
+  background: #333;
 }
 .sw-update-close {
   background: transparent;
@@ -72,7 +72,7 @@ onMounted(() => {
   line-height: 1;
 }
 .sw-update-close:hover {
-  color: #fff;
+  color: #000;
 }
 .sw-up-enter-active,
 .sw-up-leave-active {

@@ -85,7 +85,7 @@ router.beforeEach((to, from, next) => {
   const store = useAppStore()
 
   window.scrollTo(0, 0)
-  document.title = to.meta.title || 'Shopify Wholesale'
+  document.title = to.meta.title || 'THE OUTNET WHOLESALE'
 
   if (to.name === 'login' && store.isLogin) {
     next('/main')
