@@ -41,7 +41,7 @@
       </div>
       <div class="ton-just-in-grid" v-if="newArrivals.length > 0">
         <div class="ton-just-in-hero-card">
-          <h3 class="ton-just-in-count">$number</h3>
+          <h3 class="ton-just-in-count">{{ newArrivals.length }}</h3>
           <p class="ton-just-in-desc">A curated selection of the latest styles added this week</p>
           <button class="ton-btn ton-btn--outline" @click="$router.push('/searchgoods')">SHOP AT UP TO 60% OFF</button>
         </div>
@@ -161,8 +161,7 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAppStore } from '@/stores/app'
-import { get, qe } from '@/api/request'
+import { get } from '@/api/request'
 import QuickViewDialog from '@/components/QuickViewDialog.vue'
 import heroCampaign from '@/assets/images/banners/hero-campaign-desktop.jpg'
 import heroCampaignMobile from '@/assets/images/banners/hero-campaign-mobile.jpg'
@@ -176,7 +175,6 @@ import promoTrending from '@/assets/images/banners/promo-trending.jpg'
 import promoSandals from '@/assets/images/banners/promo-sandals.jpg'
 
 const router = useRouter()
-const store = useAppStore()
 
 const categories = ref([])
 const hotProducts = ref([])
@@ -194,9 +192,6 @@ const openQuickView = (id) => { quickViewProductId.value = id; quickViewVisible.
 
 let heroTimer = null
 
-const heroColors = ['#f4f2ee', '#e8e6e2', '#faf8f4', '#f0ece4']
-const heroTitles = ['PRESS PLAY', 'SUMMER WITH CHESSY', 'NEW SEASON', 'BULK PRICING']
-const heroSubtitles = ['Summer essentials are here', 'Play, pause, and unwind in style', 'The latest drops at wholesale prices', 'Volume discounts up to 40% off retail']
 
 const fallbackBanners = [
   { tag: 'NEW SEASON', title: 'PRESS PLAY', subtitle: 'Summer essentials are here', link: '/searchgoods', localImage: heroCampaign },

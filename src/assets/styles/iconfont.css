@@ -12,9 +12,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-@font-face { font-family: "Poppins-Bold"; src: url("/font/Poppins-Bold.7219547e.ttf"); }
-@font-face { font-family: "Poppins-Medium"; src: url("/font/Poppins-Medium.8d909883.ttf"); }
-@font-face { font-family: "Poppins-Regula"; src: url("/font/Poppins-Regula.707fdc5c.ttf"); }
+
 
 .icon-dianpu:before {
   content: "\e671";

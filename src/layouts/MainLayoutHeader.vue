@@ -3,9 +3,9 @@
     <div class="ton-header-top">
       <div class="ton-header-top-inner">
         <div class="ton-header-top-left">
-          <a href="/en-ae/account/track-order">Track Your Order</a>
-          <a href="/en-ae/account/create-return">Create A Return</a>
-          <a href="/en-ae/page/help/contact-us">Customer Care</a>
+          <a href="javascript:void(0)" @click="$router.push('/ordertracking')">Track Your Order</a>
+          <a href="javascript:void(0)" @click="$router.push('/myorder')">Create A Return</a>
+          <a href="javascript:void(0)" @click="$router.push('/main')">Customer Care</a>
         </div>
         <div class="ton-header-top-right">
           <template v-if="!store.isLogin">
