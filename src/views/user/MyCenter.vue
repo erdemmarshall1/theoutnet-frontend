@@ -30,6 +30,8 @@ const menuSections = computed(() => {
     {
       title: 'My Account', items: [
         { icon: 'iconfont icon-yonghu', label: 'My Account', path: '/myaccount' },
+        { icon: 'iconfont icon-shezhi', label: 'Change Password', path: '/changepassword' },
+        { icon: 'iconfont icon-anquanbaozhang', label: 'Two-Factor Auth', path: '/2fa' },
         { icon: 'iconfont icon-dingwei', label: 'Addresses', path: '/addresslist' },
         { icon: 'iconfont icon-yanjing', label: 'Browsing History', path: '/seehistory' },
         { icon: 'iconfont icon-shoucang', label: 'Wishlist', path: '/mywishlist' },
@@ -57,7 +59,7 @@ const menuSections = computed(() => {
         { icon: 'iconfont icon-dianpufill', label: 'Products', path: '/storegoodcontrol' },
         { icon: 'iconfont icon-dingdan', label: 'Store Orders', path: '/storeordercontrol' },
         { icon: 'iconfont icon-wuliu', label: 'Logistics', path: '/sellerlogistics', hidden: !store.isAdmin },
-        { icon: 'iconfont icon-shenqing', label: 'Apply Store', path: '/applystore', hidden: store.isSeller },
+        { icon: 'iconfont icon-shenqing', label: store.isSeller ? 'Shop Details' : 'Apply for Merchant', path: store.isSeller ? '/storegoodcontrol' : '/applystore', hidden: false },
         { icon: 'iconfont icon-shoucang', label: 'Followed Stores', path: '/myfollowshop' },
         { icon: 'iconfont icon-ziyuanxhdpi', label: 'Wholesale', path: '/sourcegoods' },
       ]
@@ -82,6 +84,7 @@ const menuSections = computed(() => {
         { icon: 'iconfont icon-anquan', label: 'Invitation Codes', path: '/admin-invitation-codes' },
         { icon: 'iconfont icon-shezhi', label: 'Payment Settings', path: '/admin-payment-settings' },
         { icon: 'iconfont icon-email', label: 'Email Settings', path: '/admin-email-settings' },
+        { icon: 'iconfont icon-theme', label: 'Theme Settings', path: '/admin-theme-settings' },
         { icon: 'iconfont icon-qianbao', label: 'Balance Mgmt', path: '/admin-balance' },
         { icon: 'iconfont icon-yue', label: 'Platform Wallet', path: '/admin-platform-wallet' },
       ]

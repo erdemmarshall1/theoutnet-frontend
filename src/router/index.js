@@ -33,6 +33,8 @@ const routes = [
         meta: { requiresAuth: true },
         children: [
           { path: '/myaccount', name: 'myaccount', component: () => import('@/views/user/MyAccount.vue'), meta: { title: 'My Account', requiresAuth: true } },
+          { path: '/changepassword', name: 'changepassword', component: () => import('@/views/user/ChangePassword.vue'), meta: { title: 'Change Password', requiresAuth: true } },
+          { path: '/2fa', name: '2fa', component: () => import('@/views/user/TwoFactorAuth.vue'), meta: { title: 'Two-Factor Auth', requiresAuth: true } },
           { path: '/balance', name: 'balance', component: () => import('@/views/user/Balance.vue'), meta: { title: 'Balance', requiresAuth: true } },
           { path: '/bankcardlist', name: 'bankcardlist', component: () => import('@/views/user/BankCardList.vue'), meta: { title: 'Bank Cards', requiresAuth: true } },
           { path: '/walletlist', name: 'walletlist', component: () => import('@/views/user/WalletList.vue'), meta: { title: 'Wallets', requiresAuth: true } },
@@ -66,6 +68,7 @@ const routes = [
           { path: '/admin-invitation-codes', name: 'admin-invitation-codes', component: () => import('@/views/admin/AdminInvitationCodes.vue'), meta: { title: 'Invitation Codes', requiresAuth: true } },
           { path: '/admin-payment-settings', name: 'admin-payment-settings', component: () => import('@/views/admin/AdminPaymentSettings.vue'), meta: { title: 'Payment Settings', requiresAuth: true } },
           { path: '/admin-email-settings', name: 'admin-email-settings', component: () => import('@/views/admin/AdminEmailSettings.vue'), meta: { title: 'Email Settings', requiresAuth: true } },
+          { path: '/admin-theme-settings', name: 'admin-theme-settings', component: () => import('@/views/admin/AdminThemeSettings.vue'), meta: { title: 'Theme Settings', requiresAuth: true } },
           { path: '/admin-balance', name: 'admin-balance', component: () => import('@/views/admin/AdminBalanceManagement.vue'), meta: { title: 'Balance Management', requiresAuth: true } },
           { path: '/admin-platform-wallet', name: 'admin-platform-wallet', component: () => import('@/views/admin/AdminPlatformWallet.vue'), meta: { title: 'Platform Wallet', requiresAuth: true } },
         ],

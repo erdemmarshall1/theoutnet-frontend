@@ -1,22 +1,38 @@
 <template>
   <div class="login-view">
     <div class="login-box">
-      <h2 class="login-title">Login</h2>
-      <el-form :model="form" :rules="rules" ref="formRef" label-position="top">
-        <el-form-item label="Username / Email" prop="username">
-          <el-input v-model="form.username" placeholder="Enter username or email" size="large" />
-        </el-form-item>
-        <el-form-item label="Password" prop="password">
-          <el-input v-model="form.password" type="password" show-password placeholder="Enter password" size="large" />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" size="large" style="width:100%;background:var(--g-main_color);border-color:var(--g-main_color)" :loading="loading" @click="handleLogin">Login</el-button>
-        </el-form-item>
-      </el-form>
-      <div class="login-links g-flex-align-center g-flex-justify-between">
-        <span class="link" @click="$router.push('/register')">Register</span>
-        <span class="link" @click="$router.push('/forgetpwd')">Forgot password?</span>
-      </div>
+      <h2 class="login-title">{{ twoFactorRequired ? 'Two-Factor Authentication' : 'Login' }}</h2>
+      <template v-if="!twoFactorRequired">
+        <el-form :model="form" :rules="rules" ref="formRef" label-position="top">
+          <el-form-item label="Username / Email" prop="username">
+            <el-input v-model="form.username" placeholder="Enter username or email" size="large" />
+          </el-form-item>
+          <el-form-item label="Password" prop="password">
+            <el-input v-model="form.password" type="password" show-password placeholder="Enter password" size="large" />
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="large" style="width:100%;background:#000;border-color:#000" :loading="loading" @click="handleLogin">Login</el-button>
+          </el-form-item>
+        </el-form>
+        <div class="login-links g-flex-align-center g-flex-justify-between">
+          <span class="link" @click="$router.push('/register')">Register</span>
+          <span class="link" @click="$router.push('/forgetpwd')">Forgot password?</span>
+        </div>
+      </template>
+      <template v-else>
+        <p style="color:#666;font-size:13px;margin-bottom:16px">Enter the 6-digit code from your authenticator app or a backup code.</p>
+        <el-form label-position="top">
+          <el-form-item label="Authentication Code">
+            <el-input v-model="twoFactorCode" placeholder="Enter code" size="large" maxlength="8" @keyup.enter="handle2fa" />
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="large" style="width:100%;background:#000;border-color:#000" :loading="loading2fa" @click="handle2fa">Verify</el-button>
+          </el-form-item>
+        </el-form>
+        <div class="login-links">
+          <span class="link" @click="cancel2fa">Back to login</span>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -34,6 +50,10 @@ const route = useRoute()
 const store = useAppStore()
 const formRef = ref(null)
 const loading = ref(false)
+const loading2fa = ref(false)
+const twoFactorRequired = ref(false)
+const twoFactorCode = ref('')
+const tempToken = ref('')
 
 const form = reactive({ username: '', password: '' })
 const rules = {
@@ -62,15 +82,22 @@ const handleLogin = async () => {
   try {
     const res = await post('/main/user/login', form)
 
-    const responseBody = res?.data && (res.data.token || res.data.userInfo || res.data.user)
+    const responseBody = res?.data && (res.data.token || res.data.userInfo || res.data.user || res.data.twoFactorRequired)
       ? res.data
       : res
-    const payload = responseBody?.data && (responseBody.data.token || responseBody.data.userInfo || responseBody.data.user)
+    const payload = responseBody?.data && (responseBody.data.token || responseBody.data.userInfo || responseBody.data.user || responseBody.data.twoFactorRequired)
       ? responseBody.data
       : responseBody
     const token = payload?.token || responseBody?.token || res?.token
     const userInfo = payload?.userInfo || payload?.user || responseBody?.userInfo || responseBody?.user || res?.userInfo || res?.user
     const message = payload?.msg || responseBody?.msg || res?.msg || 'Login successful'
+
+    if (payload?.twoFactorRequired) {
+      twoFactorRequired.value = true
+      tempToken.value = payload.tempToken
+      loading.value = false
+      return
+    }
 
     if (token) {
       store.setToken(token)
@@ -95,6 +122,40 @@ const handleLogin = async () => {
   } finally {
     loading.value = false
   }
+}
+
+const handle2fa = async () => {
+  if (!twoFactorCode.value) {
+    ElMessage.warning('Please enter the authentication code')
+    return
+  }
+  loading2fa.value = true
+  try {
+    const res = await post('/main/user/login/2fa', { tempToken: tempToken.value, token: twoFactorCode.value })
+    const payload = res?.data?.data || res?.data || res
+    const token = payload?.token
+    const userInfo = payload?.userInfo || payload?.user
+    if (token) {
+      store.setToken(token)
+      if (userInfo) store.setUserInfo(userInfo)
+      connectSocket()
+      ElMessage.success('Login successful')
+      const redirectPath = getRedirectPath()
+      try { await router.replace(redirectPath) } catch { window.location.hash = `#${redirectPath}` }
+    } else {
+      ElMessage.error(payload?.msg || 'Invalid code')
+    }
+  } catch (error) {
+    ElMessage.error('Verification failed')
+  } finally {
+    loading2fa.value = false
+  }
+}
+
+const cancel2fa = () => {
+  twoFactorRequired.value = false
+  twoFactorCode.value = ''
+  tempToken.value = ''
 }
 </script>
 

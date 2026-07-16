@@ -19,7 +19,7 @@
 
     <div v-if="!shop" class="c-no-list">
       <span class="c-no-list-text">You don't have a store yet</span>
-      <el-button type="primary" style="margin-top:16px" @click="$router.push('/applystore')">Apply Now</el-button>
+      <el-button type="primary" style="margin-top:16px" @click="$router.push('/applystore')">Apply for Merchant</el-button>
     </div>
     <div v-else-if="shop.status === 0" class="status-awaiting-review">
       <div class="status-icon-wrapper">
